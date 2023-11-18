@@ -58,3 +58,9 @@ npx eslint --init
 
 npm run lint:fix
 ```
+
+
+**install prettier*
+```
+npm install --save-dev prettier
+```
