@@ -72,10 +72,9 @@ _For run tsc application_
 
 - it only for development perpase . It not use for production
   _for install_
-
-```
-npm i ts-node-dev --save-dev
-```
+  ```
+  npm i ts-node-dev --save-dev
+  ```
 
 _for run_
 
@@ -83,3 +82,21 @@ _for run_
 ///---> add file path server.ts
 ts-node-dev --respawn --transpile-only server.ts
 ```
+
+**there have two pattern for softwer development**
+
+- MVC pattern
+- Modular pattern
+
+_In this time most use is modular pattern_
+
+**Rules Principle**
+
+- DRY-Don't repeat yourself
+- Fat model / thin model
+
+## pattern is
+
+_for typescript_
+
+# interface --->schema -----> model-----> db query
