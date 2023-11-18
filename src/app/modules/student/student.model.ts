@@ -67,7 +67,7 @@ const localGuardianSchema = new Schema<LocalGuardian>({
 
 const studentSchema = new Schema<Student>({
     id: { type: String },
-    name: nameSchema,
+    name: { type: nameSchema, required: true },
     gender: { type: String, enum: ["female", "male", "other"], required: true }, ///this is mongoose enam type as like ts union type
     dateOfBirth: { type: String },
     email: { type: String, required: true },
@@ -80,8 +80,8 @@ const studentSchema = new Schema<Student>({
     },
     presentAddress: { type: String, required: true },
     permanentAddress: { type: String, required: true },
-    guardian: guardianSchema,
-    localGuardian: localGuardianSchema,
+    guardian: { type: guardianSchema, required: true },
+    localGuardian: { type: localGuardianSchema, required: true },
     profileImg: { type: String, required: false },
     isActive: {
         type: String,
