@@ -4,7 +4,7 @@ import { Guardian, LocalGuardian, Student, UserName } from './student.interface'
 const nameSchema = new Schema<UserName>({
     firstName: {
         type: String,
-        required: true,
+        required: [true, 'First name is required '], ///---->for showing custom error
 
     },
     middleName: {
@@ -13,7 +13,7 @@ const nameSchema = new Schema<UserName>({
     },
     lastName: {
         type: String,
-        required: true,
+        required: [true, 'Last name is required '],
     }
 })
 const guardianSchema = new Schema<Guardian>(
@@ -66,11 +66,18 @@ const localGuardianSchema = new Schema<LocalGuardian>({
 
 
 const studentSchema = new Schema<Student>({
-    id: { type: String },
+    id: { type: String, required: true, unique: true }, ///unique is use to ensure to dublicate the value 
     name: { type: nameSchema, required: true },
-    gender: { type: String, enum: ["female", "male", "other"], required: true }, ///this is mongoose enam type as like ts union type
+    gender: {
+        type: String,
+        enum: {
+            values: ["female", "male", "other"],
+            message: '{VALUE}  is not valid .'  // here {VALUE} is giving that user put 
+        },
+        required: true
+    }, ///this is mongoose enam type as like ts union type
     dateOfBirth: { type: String },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     connectNmu: { type: String, required: true },
     emergencyContactNum: { type: String, required: true },
     bloodGroup: {
