@@ -12,6 +12,7 @@ app.use(cors());
 ///application route 
 
 app.use('/api/v1/students', studentRoutes)
+app.use('/api/v1/students', studentRoutes)
 
 
 
