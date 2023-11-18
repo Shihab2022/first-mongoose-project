@@ -68,18 +68,26 @@ const localGuardianSchema = new Schema<LocalGuardian>({
 const studentSchema = new Schema<Student>({
     id: { type: String },
     name: nameSchema,
-    gender: ["female", "male"], ///this is mongoose enam type as like ts union type
+    gender: { type: String, enum: ["female", "male", "other"], required: true }, ///this is mongoose enam type as like ts union type
     dateOfBirth: { type: String },
     email: { type: String, required: true },
     connectNmu: { type: String, required: true },
     emergencyContactNum: { type: String, required: true },
-    bloodGroup: ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"],
+    bloodGroup: {
+        type: String,
+        enum: ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"],
+
+    },
     presentAddress: { type: String, required: true },
     permanentAddress: { type: String, required: true },
     guardian: guardianSchema,
     localGuardian: localGuardianSchema,
     profileImg: { type: String, required: false },
-    isActive: ['active', 'blocked'],
+    isActive: {
+        type: String,
+        enum: ['active', 'blocked'],
+        default: 'active'
+    },
 })
 
 export const StudentModel = model<Student>('Student', studentSchema)
