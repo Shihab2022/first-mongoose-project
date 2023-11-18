@@ -86,7 +86,7 @@ ts-node-dev --respawn --transpile-only server.ts
 **there have two pattern for softwer development**
 
 - MVC pattern
-- Modular pattern
+- Modular pattern //////////-------> we use this model
 
 _In this time most use is modular pattern_
 
