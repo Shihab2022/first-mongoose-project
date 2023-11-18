@@ -86,7 +86,7 @@ ts-node-dev --respawn --transpile-only server.ts
 **there have two pattern for softwer development**
 
 - MVC pattern
-- Modular pattern
+- Modular pattern //////////-------> we use this model
 
 _In this time most use is modular pattern_
 
@@ -102,3 +102,5 @@ _for typescript_
 # interface --->schema -----> model-----> db query
 
 [TypeScript Creating Your First Document](https://mongoosejs.com/docs/typescript.html)
+
+**If we want to connect our project with compas then we copy the url from env and past on campas**
