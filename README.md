@@ -100,3 +100,5 @@ _In this time most use is modular pattern_
 _for typescript_
 
 # interface --->schema -----> model-----> db query
+
+[TypeScript Creating Your First Document](https://mongoosejs.com/docs/typescript.html)

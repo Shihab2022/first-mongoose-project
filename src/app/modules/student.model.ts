@@ -1,32 +1,23 @@
 import { Schema, model, connect } from 'mongoose';
-import { Student } from './student.interface';
+import { Guardian, LocalGuardian, Student, UserName } from './student.interface';
 
-const studentSchema = new Schema<Student>({
-    id: { type: String },
-    name: {
-        firstName: {
-            type: String,
-            required: true,
+const nameSchema = new Schema<UserName>({
+    firstName: {
+        type: String,
+        required: true,
 
-        },
-        middleName: {
-            type: String,
-            required: false,
-        },
-        lastName: {
-            type: String,
-            required: true,
-        }
     },
-    gender: ["female", "male"], ///this is mongoose enam type as like ts union type
-    dateOfBirth: { type: String },
-    email: { type: String, required: true },
-    connectNmu: { type: String, required: true },
-    emergencyContactNum: { type: String, required: true },
-    bloodGroup: ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"],
-    presentAddress: { type: String, required: true },
-    permanentAddress: { type: String, required: true },
-    guardian: {
+    middleName: {
+        type: String,
+        required: false,
+    },
+    lastName: {
+        type: String,
+        required: true,
+    }
+})
+const guardianSchema = new Schema<Guardian>(
+    {
         fatherName: {
             type: String,
             required: true,
@@ -51,27 +42,44 @@ const studentSchema = new Schema<Student>({
             type: String,
             required: true,
         }
-    },
-    localGuardian: {
-        name: {
-            type: String,
-            required: true,
-        },
-        occupation: {
-            type: String,
-            required: true,
-        },
-        connectNo: {
-            type: String,
-            required: true,
-        },
-        address: {
-            type: String,
-            required: true,
-        },
-    },
-    profileImg: { type: String, required: false },
-    isActive: ['active', 'blocked']
+    }
+)
 
-
+const localGuardianSchema = new Schema<LocalGuardian>({
+    name: {
+        type: String,
+        required: true,
+    },
+    occupation: {
+        type: String,
+        required: true,
+    },
+    connectNo: {
+        type: String,
+        required: true,
+    },
+    address: {
+        type: String,
+        required: true,
+    },
 })
+
+
+const studentSchema = new Schema<Student>({
+    id: { type: String },
+    name: nameSchema,
+    gender: ["female", "male"], ///this is mongoose enam type as like ts union type
+    dateOfBirth: { type: String },
+    email: { type: String, required: true },
+    connectNmu: { type: String, required: true },
+    emergencyContactNum: { type: String, required: true },
+    bloodGroup: ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"],
+    presentAddress: { type: String, required: true },
+    permanentAddress: { type: String, required: true },
+    guardian: guardianSchema,
+    localGuardian: localGuardianSchema,
+    profileImg: { type: String, required: false },
+    isActive: ['active', 'blocked'],
+})
+
+const Student = model<Student>('Student', studentSchema)
