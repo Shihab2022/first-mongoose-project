@@ -104,3 +104,8 @@ _for typescript_
 [TypeScript Creating Your First Document](https://mongoosejs.com/docs/typescript.html)
 
 **If we want to connect our project with compas then we copy the url from env and past on campas**
+
+## Validate our error by package
+
+[validator](https://www.npmjs.com/package/validator)
+[validator github](https://github.com/validatorjs/validator.js)

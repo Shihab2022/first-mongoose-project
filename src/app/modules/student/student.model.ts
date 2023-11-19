@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { Guardian, LocalGuardian, Student, UserName } from './student.interface';
+import validator from 'validator';
 const nameSchema = new Schema<UserName>({
     firstName: {
         type: String,
@@ -71,14 +72,14 @@ const studentSchema = new Schema<Student>({
         trim: true, ///this is use If there have any space first or last in our value then it will give error
 
         //----> If we want ot create custom  validater function then 
-        validate: {
-            validator: function (value: string) {
-                const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1)
-                return firstNameStr === value;
+        // validate: {
+        //     validator: function (value: string) {
+        //         const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1)
+        //         return firstNameStr === value;
 
-            },
-            message: '{VALUE} is not capitalize formate .',
-        },
+        //     },
+        //     message: '{VALUE} is not capitalize formate .',
+        // },
 
     },
     gender: {
@@ -90,7 +91,16 @@ const studentSchema = new Schema<Student>({
         required: [true, 'Gender is required'],
     },
     dateOfBirth: { type: String },
-    email: { type: String, required: [true, 'Email is required'], unique: true },
+    email: {
+        type: String,
+        required: [true, 'Email is required'], unique: true,
+        ///---If we want to validate email we can use the package 
+        validate: {
+            validator: (value: string) => validator.isEmail(value),
+            message: '{VALUE}  is not valid email.'
+        }
+
+    },
     connectNmu: { type: String, required: [true, 'Connect NMU is required'] },
     emergencyContactNum: { type: String, required: [true, 'Emergency contact number is required'] },
     bloodGroup: {
