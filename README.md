@@ -111,6 +111,11 @@ _for typescript_
 [validator github](https://github.com/validatorjs/validator.js)
 
 **There have two popular validator library to validate error**
-
+_first one is :_
 [joi](https://www.npmjs.com/package/joi)
 [joi documentation](https://joi.dev/api/?v=17.9.1)
+
+_second one is :_
+
+[zod](https://www.npmjs.com/package/zod)
+[zod documentation](https://zod.dev/?id=installation)
