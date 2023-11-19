@@ -109,3 +109,8 @@ _for typescript_
 
 [validator](https://www.npmjs.com/package/validator)
 [validator github](https://github.com/validatorjs/validator.js)
+
+**There have two popular validator library to validate error**
+
+[joi](https://www.npmjs.com/package/joi)
+[joi documentation](https://joi.dev/api/?v=17.9.1)

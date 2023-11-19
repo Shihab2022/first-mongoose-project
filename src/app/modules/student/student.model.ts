@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { Guardian, LocalGuardian, Student, UserName } from './student.interface';
-import validator from 'validator';
+// import validator from 'validator';
 const nameSchema = new Schema<UserName>({
     firstName: {
         type: String,
@@ -95,10 +95,10 @@ const studentSchema = new Schema<Student>({
         type: String,
         required: [true, 'Email is required'], unique: true,
         ///---If we want to validate email we can use the package 
-        validate: {
-            validator: (value: string) => validator.isEmail(value),
-            message: '{VALUE}  is not valid email.'
-        }
+        // validate: {
+        //     validator: (value: string) => validator.isEmail(value),
+        //     message: '{VALUE}  is not valid email.'
+        // }
 
     },
     connectNmu: { type: String, required: [true, 'Connect NMU is required'] },
