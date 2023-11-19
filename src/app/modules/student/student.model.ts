@@ -1,11 +1,10 @@
 import { Schema, model } from 'mongoose';
 import { Guardian, LocalGuardian, Student, UserName } from './student.interface';
-
+// import validator from 'validator';
 const nameSchema = new Schema<UserName>({
     firstName: {
         type: String,
-        required: true,
-
+        required: [true, 'First name is required'],
     },
     middleName: {
         type: String,
@@ -13,73 +12,111 @@ const nameSchema = new Schema<UserName>({
     },
     lastName: {
         type: String,
-        required: true,
+        required: [true, 'Last name is required'],
     }
-})
-const guardianSchema = new Schema<Guardian>(
-    {
-        fatherName: {
-            type: String,
-            required: true,
-        },
-        fatherOccupation: {
-            type: String,
-            required: true,
-        },
-        fatherContactNo: {
-            type: String,
-            required: true,
-        },
-        motherName: {
-            type: String,
-            required: true,
-        },
-        motherOccupation: {
-            type: String,
-            required: true,
-        },
-        motherContactNo: {
-            type: String,
-            required: true,
-        }
+});
+
+const guardianSchema = new Schema<Guardian>({
+    fatherName: {
+        type: String,
+        required: [true, 'Father\'s name is required'],
+    },
+    fatherOccupation: {
+        type: String,
+        required: [true, 'Father\'s occupation is required'],
+    },
+    fatherContactNo: {
+        type: String,
+        required: [true, 'Father\'s contact number is required'],
+    },
+    motherName: {
+        type: String,
+        required: [true, 'Mother\'s name is required'],
+    },
+    motherOccupation: {
+        type: String,
+        required: [true, 'Mother\'s occupation is required'],
+    },
+    motherContactNo: {
+        type: String,
+        required: [true, 'Mother\'s contact number is required'],
     }
-)
+});
 
 const localGuardianSchema = new Schema<LocalGuardian>({
     name: {
         type: String,
-        required: true,
+        required: [true, 'Local guardian\'s name is required'],
     },
     occupation: {
         type: String,
-        required: true,
+        required: [true, 'Local guardian\'s occupation is required'],
     },
     connectNo: {
         type: String,
-        required: true,
+        required: [true, 'Local guardian\'s contact number is required'],
     },
     address: {
         type: String,
-        required: true,
+        required: [true, 'Local guardian\'s address is required'],
     },
-})
-
+});
 
 const studentSchema = new Schema<Student>({
-    id: { type: String },
-    name: nameSchema,
-    gender: ["female", "male"], ///this is mongoose enam type as like ts union type
-    dateOfBirth: { type: String },
-    email: { type: String, required: true },
-    connectNmu: { type: String, required: true },
-    emergencyContactNum: { type: String, required: true },
-    bloodGroup: ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"],
-    presentAddress: { type: String, required: true },
-    permanentAddress: { type: String, required: true },
-    guardian: guardianSchema,
-    localGuardian: localGuardianSchema,
-    profileImg: { type: String, required: false },
-    isActive: ['active', 'blocked'],
-})
+    id: { type: String, required: [true, 'Student ID is required'], unique: true },
+    name: {
 
-export const StudentModel = model<Student>('Student', studentSchema)
+        type: nameSchema,
+        required: [true, 'Student name is required'],
+        maxLength: [10, "First name length maximum 10 charecter ...."], //this is set limit who many charectar are received...
+        trim: true, ///this is use If there have any space first or last in our value then it will give error
+
+        //----> If we want ot create custom  validater function then 
+        // validate: {
+        //     validator: function (value: string) {
+        //         const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1)
+        //         return firstNameStr === value;
+
+        //     },
+        //     message: '{VALUE} is not capitalize formate .',
+        // },
+
+    },
+    gender: {
+        type: String,
+        enum: {
+            values: ["female", "male", "other"],
+            message: '{VALUE} is not valid. Please select from ["female", "male", "other"]',
+        },
+        required: [true, 'Gender is required'],
+    },
+    dateOfBirth: { type: String },
+    email: {
+        type: String,
+        required: [true, 'Email is required'], unique: true,
+        ///---If we want to validate email we can use the package 
+        // validate: {
+        //     validator: (value: string) => validator.isEmail(value),
+        //     message: '{VALUE}  is not valid email.'
+        // }
+
+    },
+    connectNmu: { type: String, required: [true, 'Connect NMU is required'] },
+    emergencyContactNum: { type: String, required: [true, 'Emergency contact number is required'] },
+    bloodGroup: {
+        type: String,
+        enum: ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"],
+    },
+    presentAddress: { type: String, required: [true, 'Present address is required'] },
+    permanentAddress: { type: String, required: [true, 'Permanent address is required'] },
+    guardian: { type: guardianSchema, required: [true, 'Guardian details are required'] },
+    localGuardian: { type: localGuardianSchema, required: [true, 'Local guardian details are required'] },
+    profileImg: { type: String, required: false },
+    isActive: {
+        type: String,
+        enum: ['active', 'blocked'],
+        default: 'active'
+    },
+});
+
+export const StudentModel = model<Student>('Student', studentSchema);
