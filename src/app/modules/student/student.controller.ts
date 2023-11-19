@@ -12,7 +12,11 @@ const createStudent = async (req: Request, res: Response) => {
         })
     }
     catch (error) {
-        console.log(error)
+        res.status(500).json({
+            success: false,
+            message: 'Something going wrong ....',
+            error: error
+        })
     }
 }
 const getAllStudent = async (req: Request, res: Response) => {
@@ -25,7 +29,11 @@ const getAllStudent = async (req: Request, res: Response) => {
         })
     }
     catch (error) {
-        console.log(error)
+        res.status(500).json({
+            success: false,
+            message: 'Something going wrong ....',
+            error: error
+        })
     }
 }
 const getSingleStudent = async (req: Request, res: Response) => {
@@ -39,7 +47,11 @@ const getSingleStudent = async (req: Request, res: Response) => {
         })
     }
     catch (error) {
-        console.log(error)
+        res.status(500).json({
+            success: false,
+            message: 'Something going wrong ....',
+            error: error
+        })
     }
 }
 
