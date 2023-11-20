@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { TGuardian, TLocalGuardian, TStudent, StudentMethods, StudentModel, TUserName } from './student.interface';
+import { TGuardian, TLocalGuardian, TStudent, StudentModel, TUserName } from './student.interface';
 import bcrypt from 'bcrypt'
 import config from '../../config';
 // import validator from 'validator';
@@ -120,12 +120,42 @@ const studentSchema = new Schema<TStudent, StudentModel>({
         enum: ['active', 'blocked'],
         default: 'active'
     },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    }
 });
+
+
+///------>Query Middleware <---------///
+
+studentSchema.pre('find', function (next) {
+    // console.log(this)
+    this.find({ isDeleted: { $ne: true } })
+    next()
+})
+studentSchema.pre('findOne', function (next) {
+    // console.log(this)
+    this.find({ isDeleted: { $ne: true } })
+    next()
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ///----> pre save middleware / hook : will work on create / save
 studentSchema.pre('save', async function (next) {
-    // console.log(this, 'post hook : thi si si si post')
-
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const user = this;
     ///hashing password and save into db
