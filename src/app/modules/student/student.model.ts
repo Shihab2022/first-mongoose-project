@@ -66,7 +66,7 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 
 const studentSchema = new Schema<TStudent, StudentModel>({
     id: { type: String, required: [true, 'Student ID is required'], unique: true },
-    password: { type: String, required: [true, 'Password is required'], unique: true, },
+    password: { type: String, required: [true, 'Password is required'] },
     name: {
 
         type: nameSchema,
@@ -134,8 +134,9 @@ studentSchema.pre('save', async function (next) {
 })
 
 //------> post save middleware / hook
-studentSchema.post('save', function () {
-    console.log(this, 'posst hook ')
+studentSchema.post('save', function (doc, next) {
+    doc.password = ''
+    next()
 })
 
 
