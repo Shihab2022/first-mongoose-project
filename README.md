@@ -119,3 +119,19 @@ _second one is :_
 
 [zod](https://www.npmjs.com/package/zod)
 [zod documentation](https://zod.dev/?id=installation)
+
+**For password encript use this lybrary**
+
+[bcrypt](https://www.npmjs.com/package/bcrypt)
+
+```
+npm i bcrypt
+```
+
+_for type_
+
+[bcrypt type](https://www.npmjs.com/package/@types/bcrypt)
+
+```
+npm i -D @types/bcrypt
+```

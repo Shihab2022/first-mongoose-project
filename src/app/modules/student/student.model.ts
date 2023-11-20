@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { TGuardian, TLocalGuardian, TStudent, StudentMethods, StudentModel, TUserName } from './student.interface';
+import bcrypt from 'bcrypt'
+import config from '../../config';
 // import validator from 'validator';
 const nameSchema = new Schema<TUserName>({
     firstName: {
@@ -64,6 +66,7 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 
 const studentSchema = new Schema<TStudent, StudentModel>({
     id: { type: String, required: [true, 'Student ID is required'], unique: true },
+    password: { type: String, required: [true, 'Password is required'], unique: true, },
     name: {
 
         type: nameSchema,
@@ -119,15 +122,35 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     },
 });
 
+///----> pre save middleware / hook : will work on create / save
+studentSchema.pre('save', async function (next) {
+    // console.log(this, 'post hook : thi si si si post')
+
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this;
+    ///hashing password and save into db
+    user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_rounds));
+    next()
+})
+
+//------> post save middleware / hook
+studentSchema.post('save', function () {
+    console.log(this, 'posst hook ')
+})
+
+
+
+
+
+
+
+
 //----.Creating a custom STATIC   method
 studentSchema.statics.isUserExists = async function (id: string) {
     const existingUser = await Student.findOne({ id })
     return existingUser
 
 }
-
-
-
 
 
 /// ---> Creating a custom instance method 
