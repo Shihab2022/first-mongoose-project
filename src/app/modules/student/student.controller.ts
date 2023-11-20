@@ -26,10 +26,10 @@ const createStudent = async (req: Request, res: Response) => {
             data: result
         })
     }
-    catch (error) {
+    catch (error: any) {
         res.status(500).json({
             success: false,
-            message: 'Something going wrong ....',
+            message: error.message || 'Something going wrong ....',
             error: error
         })
     }
@@ -69,9 +69,28 @@ const getSingleStudent = async (req: Request, res: Response) => {
         })
     }
 }
+const deleteStudent = async (req: Request, res: Response) => {
+    try {
+        const { studentId } = req.params
+        const result = await studentServices.deleteStudentFromDB(studentId)
+        res.status(200).json({
+            success: true,
+            message: '  student deleted  successfully !!!',
+            data: result
+        })
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Something going wrong ....',
+            error: error
+        })
+    }
+}
 
 export const studentController = {
     createStudent,
     getAllStudent,
-    getSingleStudent
+    getSingleStudent,
+    deleteStudent
 }
