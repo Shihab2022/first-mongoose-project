@@ -141,6 +141,13 @@ studentSchema.pre('findOne', function (next) {
 })
 
 
+//--->for aggregate 
+
+studentSchema.pre('aggregate', function (next) {
+    // console.log(this)
+    this.pipeline().unshift({ $match: { isDeleted: true } })
+    next()
+})
 
 
 
