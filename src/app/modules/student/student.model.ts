@@ -71,7 +71,6 @@ const studentSchema = new Schema<TStudent, StudentModel>({
         required: [true, 'User ID is required'], unique: true,
         ref: "User" //create conection with User
     },
-    password: { type: String, required: [true, 'Password is required'] },
     name: {
 
         type: nameSchema,
