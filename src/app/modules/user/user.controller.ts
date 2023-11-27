@@ -1,19 +1,11 @@
+import { Request, Response } from "express"
+import { UserServices } from "./user.service"
+
 const createStudent = async (req: Request, res: Response) => {
     try {
 
-        const { student: studentData } = req.body
-        ///validate data using joi 
-        // const { error, value } = studentValidationSchema.validate(studentData)
-        // const result = await studentServices.createStudentIntoDB(value) 
-        // if (error) {
-        //     res.status(500).json({
-        //         success: false,
-        //         message: 'Something going wrong ....',
-        //         error: error?.details
-        //     })
-        // }
-        const zodData = studentValidationSchemaWithZod.parse(studentData)
-        const result = await studentServices.createStudentIntoDB(zodData)
+        const { password, student: studentData } = req.body
+        const result = await UserServices.createStudentIntoDB(password, studentData)
         res.status(200).json({
             success: true,
             message: 'Student is created successfully !!!',
@@ -27,4 +19,8 @@ const createStudent = async (req: Request, res: Response) => {
             error: error
         })
     }
+}
+
+export const UserControllers = {
+    createStudent
 }
