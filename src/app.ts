@@ -1,10 +1,9 @@
 
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import { studentRoutes } from './app/modules/student/student.route';
-import { UserRoutes } from './app/modules/user/user.route';
 import globalErrorHandler from './app/middlewares/globalErrorHandllers';
 import notFound from './app/middlewares/notFound';
+import { rootRouter } from './app/routes';
 // const {Request} from express
 const app: Application = express();
 
@@ -15,17 +14,16 @@ app.use(cors());
 
 ///application route 
 
-app.use('/api/v1/students', studentRoutes)
-app.use('/api/v1/users', UserRoutes)
+app.use('/api/v1', rootRouter)
 
 
 
-app.get('/', (req: Request, res: Response) => {
+const testRoute = (req: Request, res: Response) => {
   const a = 10;
-
   res.send(a);
-});
+}
 
+app.get('/', testRoute)
 
 app.use(globalErrorHandler) //add global handler
 
