@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { studentServices } from "./student.service";
 import studentValidationSchemaWithZod from "./student.validation";
+import httpStatus from 'http-status';
+import sendResponse from "../../utils/sentResponce";
 // import studentValidationSchema from "./student.joi.validation";
 
 
@@ -20,9 +22,11 @@ const createStudent = async (req: Request, res: Response, next: NextFunction) =>
         // }
         const zodData = studentValidationSchemaWithZod.parse(studentData)
         const result = await studentServices.createStudentIntoDB(zodData)
-        res.status(200).json({
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
             success: true,
-            message: 'Student is created successfully !!!',
+            message: "Student is created successfully",
             data: result
         })
     }
@@ -33,9 +37,11 @@ const createStudent = async (req: Request, res: Response, next: NextFunction) =>
 const getAllStudent = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await studentServices.getAllStudentFromDB()
-        res.status(200).json({
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
             success: true,
-            message: 'Get all student successfully !!!',
+            message: "Get all student successfully !!!",
             data: result
         })
     }
@@ -47,9 +53,12 @@ const getSingleStudent = async (req: Request, res: Response, next: NextFunction)
     try {
         const { studentId } = req.params
         const result = await studentServices.getSingleStudentFromDB(studentId)
-        res.status(200).json({
+
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
             success: true,
-            message: 'Get single  student successfully !!!',
+            message: "'Get single  student successfully !!!",
             data: result
         })
     }
@@ -61,11 +70,14 @@ const deleteStudent = async (req: Request, res: Response, next: NextFunction) =>
     try {
         const { studentId } = req.params
         const result = await studentServices.deleteStudentFromDB(studentId)
-        res.status(200).json({
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
             success: true,
-            message: '  student deleted  successfully !!!',
+            message: "student deleted  successfully !!!",
             data: result
         })
+
     }
     catch (error) {
         next(error)

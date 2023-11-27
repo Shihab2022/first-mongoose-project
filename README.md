@@ -135,3 +135,7 @@ _for type_
 ```
 npm i -D @types/bcrypt
 ```
+
+# handle status code
+
+## [http-status](https://www.npmjs.com/package/http-status)
