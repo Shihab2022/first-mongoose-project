@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { TGuardian, TLocalGuardian, TStudent, StudentModel, TUserName } from './student.interface';
-import bcrypt from 'bcrypt'
-import config from '../../config';
+// import bcrypt from 'bcrypt'
+// import config from '../../config';
 // import validator from 'validator';
 const nameSchema = new Schema<TUserName>({
     firstName: {
@@ -175,19 +175,19 @@ studentSchema.pre('aggregate', function (next) {
 
 
 ///----> pre save middleware / hook : will work on create / save
-studentSchema.pre('save', async function (next) {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const user = this;
-    ///hashing password and save into db
-    user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_rounds));
-    next()
-})
+// studentSchema.pre('save', async function (next) {
+//     // eslint-disable-next-line @typescript-eslint/no-this-alias
+//     const user = this;
+//     ///hashing password and save into db
+//     user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_rounds));
+//     next()
+// })
 
 //------> post save middleware / hook
-studentSchema.post('save', function (doc, next) {
-    doc.password = ''
-    next()
-})
+// studentSchema.post('save', function (doc, next) {
+//     doc.password = ''
+//     next()
+// })
 
 
 
