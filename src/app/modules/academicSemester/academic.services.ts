@@ -21,8 +21,16 @@ const getAllAcademicSemesterFromDB = async () => {
 
     return result
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getSingleAcademicSemesterFromDB = async (id: any) => {
+
+    const result = await AcademicSemester.findById(id)
+
+    return result
+}
 
 export const AcademicSemesterServices = {
     createAcademicSemesterIntoDB,
-    getAllAcademicSemesterFromDB
+    getAllAcademicSemesterFromDB,
+    getSingleAcademicSemesterFromDB
 }
