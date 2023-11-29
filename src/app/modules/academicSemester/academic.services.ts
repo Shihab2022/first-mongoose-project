@@ -28,9 +28,16 @@ const getSingleAcademicSemesterFromDB = async (id: any) => {
 
     return result
 }
+const updateSingleAcademicSemesterFromDB = async (id: any, data: any) => {
+
+    const result = await AcademicSemester.findByIdAndUpdate(id, data)  // there have a problem to update , it not update real time
+
+    return result
+}
 
 export const AcademicSemesterServices = {
     createAcademicSemesterIntoDB,
     getAllAcademicSemesterFromDB,
-    getSingleAcademicSemesterFromDB
+    getSingleAcademicSemesterFromDB,
+    updateSingleAcademicSemesterFromDB
 }
