@@ -28,9 +28,11 @@ const getSingleAcademicSemesterFromDB = async (id: any) => {
 
     return result
 }
-const updateSingleAcademicSemesterFromDB = async (id: any, data: any) => {
-
-    const result = await AcademicSemester.findByIdAndUpdate(id, data)  // there have a problem to update , it not update real time
+const updateSingleAcademicSemesterFromDB = async (id: any, payload: any) => {
+    if (payload.name && payload.code && academicSemesterNameCodeMapper[payload.name] !== payload.code) {
+        throw new Error('Invalid Semester code')
+    }
+    const result = await AcademicSemester.findByIdAndUpdate(id, payload, { new: true })  // there have a problem to update , it not update real time
 
     return result
 }
