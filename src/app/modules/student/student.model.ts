@@ -64,74 +64,80 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
     },
 });
 
-const studentSchema = new Schema<TStudent, StudentModel>({
-    id: { type: String, required: [true, 'Student ID is required'], unique: true },
-    user: {
-        type: Schema.Types.ObjectId,
-        required: [true, 'User ID is required'], unique: true,
-        ref: "User" //create conection with User
-    },
-    name: {
-
-        type: nameSchema,
-        required: [true, 'Student name is required'],
-        maxLength: [10, "First name length maximum 10 charecter ...."], //this is set limit who many charectar are received...
-        trim: true, ///this is use If there have any space first or last in our value then it will give error
-
-        //----> If we want ot create custom  validater function then 
-        // validate: {
-        //     validator: function (value: string) {
-        //         const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1)
-        //         return firstNameStr === value;
-
-        //     },
-        //     message: '{VALUE} is not capitalize formate .',
-        // },
-
-    },
-    gender: {
-        type: String,
-        enum: {
-            values: ["female", "male", "other"],
-            message: '{VALUE} is not valid. Please select from ["female", "male", "other"]',
+const studentSchema = new Schema<TStudent, StudentModel>(
+    {
+        id: {
+            type: String,
+            required: [true, 'ID is required'],
+            unique: true,
         },
-        required: [true, 'Gender is required'],
+        user: {
+            type: Schema.Types.ObjectId,
+            required: [true, 'User id is required'],
+            unique: true,
+            ref: 'User',
+        },
+        name: {
+            type: nameSchema,
+            required: [true, 'Name is required'],
+        },
+        gender: {
+            type: String,
+            enum: {
+                values: ['male', 'female', 'other'],
+                message: '{VALUE} is not a valid gender',
+            },
+            required: [true, 'Gender is required'],
+        },
+        dateOfBirth: { type: Date },
+        email: {
+            type: String,
+            required: [true, 'Email is required'],
+            unique: true,
+        },
+        contactNo: { type: String, required: [true, 'Contact number is required'] },
+        emergencyContactNo: {
+            type: String,
+            required: [true, 'Emergency contact number is required'],
+        },
+        bloogGroup: {
+            type: String,
+            enum: {
+                values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+                message: '{VALUE} is not a valid blood group',
+            },
+        },
+        presentAddress: {
+            type: String,
+            required: [true, 'Present address is required'],
+        },
+        permanentAddress: {
+            type: String,
+            required: [true, 'Permanent address is required'],
+        },
+        guardian: {
+            type: guardianSchema,
+            required: [true, 'Guardian information is required'],
+        },
+        localGuardian: {
+            type: localGuardianSchema,
+            required: [true, 'Local guardian information is required'],
+        },
+        profileImg: { type: String },
+        admissionSemester: {
+            type: Schema.Types.ObjectId,
+            ref: 'AcademicSemester',
+        },
+        isDeleted: {
+            type: Boolean,
+            default: false,
+        },
     },
-    dateOfBirth: { type: Date },
-    email: {
-        type: String,
-        required: [true, 'Email is required'], unique: true,
-        ///---If we want to validate email we can use the package 
-        // validate: {
-        //     validator: (value: string) => validator.isEmail(value),
-        //     message: '{VALUE}  is not valid email.'
-        // }
-
+    {
+        toJSON: {
+            virtuals: true,
+        },
     },
-    connectNmu: { type: String, required: [true, 'Connect NMU is required'] },
-    emergencyContactNum: { type: String, required: [true, 'Emergency contact number is required'] },
-    bloodGroup: {
-        type: String,
-        enum: ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"],
-    },
-    presentAddress: { type: String, required: [true, 'Present address is required'] },
-    permanentAddress: { type: String, required: [true, 'Permanent address is required'] },
-    guardian: { type: guardianSchema, required: [true, 'Guardian details are required'] },
-    localGuardian: { type: localGuardianSchema, required: [true, 'Local guardian details are required'] },
-    profileImg: { type: String, required: false },
-    admissionSemester: {
-        type: Schema.Types.ObjectId,
-        ref: 'AcademicSemester'
-    },
-    isDeleted: {
-        type: Boolean,
-        default: false,
-    }
-}, {
-    toJSON: {
-        virtuals: true
-    }
-}
 );
 
 //-------> virtual for add a new field <----------

@@ -26,22 +26,22 @@ export type TUserName = {
 export type TStudent = {
     id: string;
     user: Types.ObjectId;
+    password: string;
     name: TUserName;
     gender: 'male' | 'female' | 'other';
     dateOfBirth?: Date;
     email: string;
-    connectNmu: string;
-    emergencyContactNum: string;
-    bloodGroup?: "A+" | "B+" | "AB+" | "O+" | "A-" | "B-" | "AB-" | "O-";
+    contactNo: string;
+    emergencyContactNo: string;
+    bloogGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
     presentAddress: string;
     permanentAddress: string;
     guardian: TGuardian;
     localGuardian: TLocalGuardian;
     profileImg?: string;
-    admissionSemester: Types.ObjectId,
-    isDeleted: boolean,
-
-}
+    admissionSemester: Types.ObjectId;
+    isDeleted: boolean;
+};
 
 // Creating a static instance method /
 
