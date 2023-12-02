@@ -54,10 +54,6 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
         type: String,
         required: [true, 'Local guardian\'s occupation is required'],
     },
-    connectNo: {
-        type: String,
-        required: [true, 'Local guardian\'s contact number is required'],
-    },
     address: {
         type: String,
         required: [true, 'Local guardian\'s address is required'],
@@ -100,7 +96,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
             type: String,
             required: [true, 'Emergency contact number is required'],
         },
-        bloogGroup: {
+        bloodGroup: {
             type: String,
             enum: {
                 values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
@@ -128,6 +124,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
             type: Schema.Types.ObjectId,
             ref: 'AcademicSemester',
         },
+        // academicDepartment: {
+        //     type: Schema.Types.ObjectId,
+        //     ref: 'AcademicSemester',
+        // },
         isDeleted: {
             type: Boolean,
             default: false,
