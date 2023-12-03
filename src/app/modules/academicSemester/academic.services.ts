@@ -1,3 +1,5 @@
+import httpStatus from "http-status";
+import AppError from "../../errors/AppError";
 import { academicSemesterNameCodeMapper } from "./academic.constant";
 import { TAcademicSemester } from "./academic.interface";
 import { AcademicSemester } from "./academic.model";
@@ -8,7 +10,7 @@ const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
 
 
     if (academicSemesterNameCodeMapper[payload.name] !== payload.code) {
-        throw new Error('Invalid Semester code')
+        throw new AppError(httpStatus.NOT_FOUND, 'Invalid Semester code')
     }
     const result = await AcademicSemester.create(payload)
 
@@ -30,7 +32,7 @@ const getSingleAcademicSemesterFromDB = async (id: any) => {
 }
 const updateSingleAcademicSemesterFromDB = async (id: any, payload: any) => {
     if (payload.name && payload.code && academicSemesterNameCodeMapper[payload.name] !== payload.code) {
-        throw new Error('Invalid Semester code')
+        throw new AppError(httpStatus.NOT_FOUND, 'Invalid Semester code')
     }
     const result = await AcademicSemester.findByIdAndUpdate(id, payload, { new: true })  // there have a problem to update , it not update real time
 
