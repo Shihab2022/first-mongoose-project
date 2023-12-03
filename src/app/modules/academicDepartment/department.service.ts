@@ -11,12 +11,15 @@ const createAcademicDepartmentIntoDB = async (payload: TAcademicDepartment) => {
 
 }
 const getAllAcademicDepartmentFromDB = async () => {
-    const result = await AcademicDepartment.find()
+
+    // here populate is use for showing referensing data 
+
+    const result = await AcademicDepartment.find().populate('academicFaculty')
     return result
 }
 const getSingleAcademicDepartmentFromDB = async (id: string) => {
     // const result = await Student.findOne({ id })
-    const result = await AcademicDepartment.findById(id)
+    const result = await AcademicDepartment.findById(id).populate('academicFaculty')
     return result
 }
 const updateSingleAcademicDepartmentFromDB = async (id: any, payload: any) => {
