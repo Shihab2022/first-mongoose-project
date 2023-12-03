@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import sendResponse from "../../utils/sentResponce";
 import catchAsync from "../../utils/catchAsync";
 import { AcademicDepartmentService } from './department.service';
+import { AcademicDepartment } from './department.model';
 
 
 
@@ -45,14 +46,21 @@ const getSingleAcademicDepartment = catchAsync(async (req, res) => {
 const updateSingleAcademicDepartment = catchAsync(async (req, res) => {
 
     const { departmentId } = req.params
-    const result = await AcademicDepartmentService.updateSingleAcademicDepartmentFromDB(departmentId, req.body)
+    const isDepartmentExit = await AcademicDepartment.findOne({ _id: departmentId })
+    /// here have an issue
+    if (!isDepartmentExit) {
+        throw new Error("Department is not exit !!")
+    }
+    else {
+        const result = await AcademicDepartmentService.updateSingleAcademicDepartmentFromDB(departmentId, req.body)
 
-    sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: "Update Single  Academic faculty successfully !!!",
-        data: result
-    })
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: "Update Single  Academic faculty successfully !!!",
+            data: result
+        })
+    }
 })
 
 

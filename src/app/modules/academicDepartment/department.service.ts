@@ -20,7 +20,6 @@ const getSingleAcademicDepartmentFromDB = async (id: string) => {
     return result
 }
 const updateSingleAcademicDepartmentFromDB = async (id: any, payload: any) => {
-
     const result = await AcademicDepartment.findByIdAndUpdate(id, payload, { new: true })  // there have a problem to update , it not update real time
 
     return result
