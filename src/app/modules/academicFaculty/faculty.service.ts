@@ -15,9 +15,7 @@ const getAllAcademicFacultiesFromDB = async () => {
 }
 const getSingleAcademicFacultyFromDB = async (id: string) => {
     // const result = await Student.findOne({ id })
-    const result = await AcademicFaculty.aggregate([{
-        $match: { id: id }
-    }])
+    const result = await AcademicFaculty.findById(id)
     return result
 }
 const updateSingleAcademicFacultyFromDB = async (id: any, payload: any) => {

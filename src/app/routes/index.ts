@@ -22,7 +22,7 @@ const moduleRoutes = [
         endPoint: AcademicSemesterRoutes
     },
     {
-        path: '/academic-semesters',
+        path: '/academic-faculty',
         endPoint: AcademicFacultyRoutes
     },
 ]
