@@ -139,3 +139,198 @@ npm i -D @types/bcrypt
 # handle status code
 
 ## [http-status](https://www.npmjs.com/package/http-status)
+
+## Functional Requirements: PH University
+
+# Authentication
+
+_Student_
+
+- Student can login and logout securely
+- Students can update their password.
+- Faculty
+- Faculty can login and logout securely
+- Faculty can update their password.
+- Admin:
+- Facultycan login and logout securely
+- Faculty can update their password.
+
+# Profile Management:
+
+_Student_
+
+- Students can manage and update their profile.
+- Students can update certain fields
+- Faculty:
+- Faculty can manage and update their profile.
+- Faculty Can update certain fields\
+- Admin:
+- Admin can manage and update their profile.
+- Admin can update certain fields
+
+# Academic Process:
+
+_Student:_
+
+- Students can enroll in offered courses for a specific semester.
+- Students can view their class schedule.
+- Students can see their grades.
+- Students can view notice board and events
+- Faculty:
+- Faculty can manage student grades
+- Faculty can access students' personal and academic information.
+- Admin:
+- Admin can manage multiple processes:
+- Semester
+- Course
+- Offered Course
+- Section
+- Room
+- Building
+
+# User Management:
+
+_Admin:_
+
+- Admin can manage multiple accounts
+- Admin can block/unblock user
+- Admin can change user password
+
+# Data Model
+
+_User:_
+
+- \_id
+- Id (generated)
+- password
+- needsPasswordChange
+- role
+- status
+- isDeleted
+- createdAt
+- updatedAt
+
+_Student:_
+
+- \_id
+- id (generated)
+- name
+- gender
+- dateOfBirth
+- email
+- contactNo
+- emergencyContactNo
+- presentAddress
+- permanentAddress
+- guardian
+- localGuardian
+- profileImage
+- admissionSemester
+- isDeleted
+- createdAt
+- updatedAt
+
+_Faculty:_
+
+- \_id
+- id (generated)
+- designation
+- name
+- gender
+- dateOfBirth
+- email
+- contactNo
+- emergencyContactNo
+- presentAddress
+- permanentAddress
+- profileImage
+- academicFaculty
+- academicDepartment
+- isDeleted
+- createdAt
+- updatedAt
+
+_Admin:_
+
+- \_id
+- id (generated)
+- designation
+- name
+- gender
+- dateOfBirth
+- email
+- contactNo
+- emergencyContactNo
+- presentAddress
+- permanentAddress
+- profileImage
+- managementDepartment
+- isDeleted
+- createdAt
+- updatedAt
+
+_Academic Semester:_
+
+- \_id
+- name
+- year
+- code
+- startMonth
+- endMonth
+- createdAt
+- updatedAt
+
+_Academic Faculty:_
+
+- \_id
+- name
+- createdAt
+- updatedAt
+
+_Academic Department:_
+
+- \_id
+- name
+- academicFaculty
+- createdAt
+- updatedAt
+
+# API Endpoints
+
+_User:_
+
+- users/create-student (POST)
+- users/create-faculty (POST)
+- users/create-admin (POST)
+
+_Student:_
+
+- students (GET)
+- students/:id (GET)
+- students/:id (PATCH)
+- students/:id (DELETE)
+- students/my-profile
+
+_Faculty:_
+
+- faculties(GET)
+- faculties/:id (GET)
+- faculties/:id (PATCH)
+- faculties/:id (DELETE)
+- faculties/my-profile
+
+_Admin:_
+
+- admins (GET)
+- admins /:id (GET)
+- admins /:id (PATCH)
+- admins /:id (DELETE)
+- admins /my-profile
+
+_Auth:_
+
+- auth/login
+- auth/refresh-token
+- auth/change-password
+- auth/forgot-password
+- auth/reset-password
