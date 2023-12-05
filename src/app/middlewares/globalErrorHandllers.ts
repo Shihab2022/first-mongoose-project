@@ -7,6 +7,7 @@ import { TErrorSource } from '../interface/error';
 import { ZodError, ZodIssue } from 'zod';
 import config from '../config';
 import handleZodError from '../errors/handleZodError';
+import handleValidationError from '../errors/handleValidationError';
 
 
 const globalErrorHandler = (error: any, req: Request, res: Response, next: NextFunction) => {
@@ -29,6 +30,14 @@ const globalErrorHandler = (error: any, req: Request, res: Response, next: NextF
         message = simplifiedError.message;
         errorSources = simplifiedError.errorSource
 
+    }
+
+    else if (error.name === "ValidationError") {
+
+        const simplifiedError = handleValidationError(error)
+        statusCode = simplifiedError.statusCode;
+        message = simplifiedError.message;
+        errorSources = simplifiedError.errorSources
     }
     return res.status(statusCode).json({
         success: false,
