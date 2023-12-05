@@ -87,6 +87,7 @@ const deleteStudentFromDB = async (id: string) => {
     } catch (error) {
         await session.abortTransaction()
         await session.endSession()
+        throw new AppError(httpStatus.BAD_REQUEST,"Something went wrong")
     }
 
 }
