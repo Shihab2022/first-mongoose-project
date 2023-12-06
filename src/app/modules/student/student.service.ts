@@ -7,7 +7,7 @@ import { TStudent } from "./student.interface";
 
 
 const getAllStudentFromDB = async (query: Record<string, unknown>) => {
-    console.log('base query', query)
+
     const queryObject = { ...query } /// copy the query
     // {email :{$regex :query.searchTerm , $options :'i'}}
     // {presentAddress :{$regex :query.searchTerm , $options :'i'}}
@@ -25,8 +25,11 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
         }))
     })
     /// Filtering 
-    const excludeFields = ['searchTerm', 'sort', 'limit', 'page']
+    const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields']
     excludeFields.forEach((ele) => delete queryObject[ele])
+
+    console.log({ base_query: query, queryObject: queryObject })
+
     const filterQuery = searchQuery.find(queryObject)
         .populate('admissionSemester')
         .populate({
@@ -44,6 +47,8 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
 
     const sortQuery = filterQuery.sort(sort)
 
+    ///---------->?page=1&limit=1
+
     let page = 1
     let limit = 1;
     let skip = 0;
@@ -56,9 +61,22 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
     }
     const paginatedQuery = sortQuery.skip(skip)
 
-    const limitQuery = await paginatedQuery.limit(limit)
+    const limitQuery = paginatedQuery.limit(limit)
 
-    return limitQuery
+    ///----> if we get some specific filed then we can send data by query and then 
+
+    //fields:"name,email" //data is come this formate
+    // fields:"name email" // we need this formate
+
+    //---> query formate --->?fields=name,email,gender
+
+    ///---> query formate ---> if we send filed with - then it will skip this filed ?fields=-name
+    let fields = '-_v';
+    if (query.fields) {
+        fields = (query.fields as string).split(',').join(' ')
+    }
+    const fieldQuery = await limitQuery.select(fields)
+    return fieldQuery
 }
 const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
 
