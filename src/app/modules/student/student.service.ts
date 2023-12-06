@@ -6,16 +6,31 @@ import { User } from "../user/user.model";
 import { TStudent } from "./student.interface";
 
 
-const getAllStudentFromDB = async () => {
-    const result = await Student.find()
-        .populate('admissionSemester')
-        .populate({
-            path: 'academicDepartment',
-            populate: {
-                path: 'academicFaculty'
-            }
+const getAllStudentFromDB = async (payload: Record<string, unknown>) => {
 
-        })
+    // {email :{$regex :query.searchTerm , $options :'i'}}
+    // {presentAddress :{$regex :query.searchTerm , $options :'i'}}
+    // {'name.firstName' :{$regex :query.searchTerm , $options :'i'}}
+
+
+    let searchTerm = ''
+    if (payload.searchTerm) {
+        searchTerm = payload.searchTerm as string
+    }
+
+    const result = await Student.find({
+        $or: ['email', "name.firstName", "presentAddress"].map((field) => ({
+            [field]: { $regex: searchTerm, $options: 'i' }
+        }))
+    })
+    // .populate('admissionSemester')
+    // .populate({
+    //     path: 'academicDepartment',
+    //     populate: {
+    //         path: 'academicFaculty'
+    //     }
+
+    // })
     return result
 }
 const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
@@ -87,7 +102,7 @@ const deleteStudentFromDB = async (id: string) => {
     } catch (error) {
         await session.abortTransaction()
         await session.endSession()
-        throw new AppError(httpStatus.BAD_REQUEST,"Something went wrong")
+        throw new AppError(httpStatus.BAD_REQUEST, "Something went wrong")
     }
 
 }
