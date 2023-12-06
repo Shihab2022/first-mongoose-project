@@ -85,7 +85,14 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
 
     //---------> this is using class constructor <---------//
 
-    const studentQuery = new QueryBuilder(Student.find(), query).search(searchableFields).filter().sort().paginate().fields()
+    const studentQuery = new QueryBuilder(Student.find().populate('admissionSemester')
+        .populate({
+            path: 'academicDepartment',
+            populate: {
+                path: 'academicFaculty'
+            }
+
+        }), query).search(searchableFields).filter().sort().paginate().fields()
 
     const result = await studentQuery.modelQuery;
     return result
