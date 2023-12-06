@@ -25,18 +25,26 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
         }))
     })
     /// Filtering 
-    const excludeFields = ['searchTerm']
+    const excludeFields = ['searchTerm', 'sort']
     excludeFields.forEach((ele) => delete queryObject[ele])
-    const result = await searchQuery.find(queryObject)
-    // .populate('admissionSemester')
-    // .populate({
-    //     path: 'academicDepartment',
-    //     populate: {
-    //         path: 'academicFaculty'
-    //     }
+    const filterQuery = searchQuery.find(queryObject)
+        .populate('admissionSemester')
+        .populate({
+            path: 'academicDepartment',
+            populate: {
+                path: 'academicFaculty'
+            }
 
-    // })
-    return result
+        })
+
+    let sort = '-createdAt'
+    if (query.sort) {
+        sort = query.sort as string
+    }
+
+    const sortQuery = await filterQuery.sort(sort)
+
+    return sortQuery
 }
 const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
 
