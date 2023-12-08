@@ -24,7 +24,8 @@ const getSingleCourseFromDB = async (id: string) => {
 const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
     const { preRequisiteCourses, ...courseRemainData } = payload
     //step 1
-    const updatedCourseInfo = await Course.findByIdAndUpdate(id, courseRemainData, { new: true, runValidators: true })
+    // const updatedCourseInfo = 
+    await Course.findByIdAndUpdate(id, courseRemainData, { new: true, runValidators: true })
 
 
 
@@ -33,16 +34,24 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
         //filter out the deleted fields
         const deletedPreRequisites = preRequisiteCourses.filter((ele) => ele.course && ele.isDeleted).map(ele => ele.course)
 
-        const deletedPreRequisiteCourses = await Course.findByIdAndUpdate(id, {
+        // const deletedPreRequisiteCourses =
+        await Course.findByIdAndUpdate(id, {
             $pull: { preRequisiteCourses: { course: { $in: deletedPreRequisites } } }
         })
-        console.log(deletedPreRequisites)
+
+        //filter the new course fields
+        const newPreRequisites = preRequisiteCourses?.filter((ele) => ele.course && !ele.isDeleted)
+
+        // const newPreRequisitesCourses =
+        await Course.findByIdAndUpdate(id, {
+            $addToSet: { preRequisiteCourses: { $each: newPreRequisites } }
+        })
     }
 
+    const result = await Course.findById(id).populate("preRequisiteCourses.course")
 
 
-
-    return updatedCourseInfo
+    return result
 
 }
 const deleteCourseFromDB = async (id: string) => {
