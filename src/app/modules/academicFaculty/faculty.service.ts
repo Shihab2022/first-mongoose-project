@@ -24,9 +24,16 @@ const updateSingleAcademicFacultyFromDB = async (id: any, payload: any) => {
 
     return result
 }
+const deleteAcademicFacultyFromDB = async (id: string) => {
+
+    const result = await AcademicFaculty.findByIdAndUpdate(id, { isDeleted: true }, { new: true })  // there have a problem to update , it not update real time
+
+    return result
+}
 export const AcademicFacultyService = {
     getAllAcademicFacultiesFromDB,
     getSingleAcademicFacultyFromDB,
     createAcademicFacultyIntoDB,
-    updateSingleAcademicFacultyFromDB
+    updateSingleAcademicFacultyFromDB,
+    deleteAcademicFacultyFromDB
 }
