@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from "mongoose";
 import { TAdmin } from "./admin.interface";
+import bcrypt from 'bcrypt'
+import config from "../../config";
 
 const adminSchema = new Schema<TAdmin>({
     email: {
@@ -34,4 +37,13 @@ const adminSchema = new Schema<TAdmin>({
     }
 })
 
+adminSchema.pre("save", async function (next) {
+    const user = this
+    user.password = await bcrypt.hash(
+        user.password,
+        Number(config.bcrypt_salt_rounds)
+    )
+    next()
+
+})
 export const Admin = model<TAdmin>('admin', adminSchema)
