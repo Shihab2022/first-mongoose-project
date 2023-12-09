@@ -5,7 +5,8 @@ const academicFacultyValidation = z.object({
         z.object({
             name: z.string({
                 invalid_type_error: 'Academic faculty must be string'
-            })
+            }),
+            isDeleted: z.boolean().optional()
         })
 
 })

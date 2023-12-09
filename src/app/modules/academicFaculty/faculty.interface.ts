@@ -1,3 +1,4 @@
 export type TAcademicFaculty = {
-    name: string
+    name: string,
+    isDeleted: boolean
 }
