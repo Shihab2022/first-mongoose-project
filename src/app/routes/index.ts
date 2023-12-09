@@ -5,6 +5,7 @@ import { AcademicSemesterRoutes } from "../modules/academicSemester/academic.rou
 import { AcademicFacultyRoutes } from "../modules/academicFaculty/faculty.routes";
 import { AcademicDepartmentRoutes } from "../modules/academicDepartment/department.routes";
 import { CoursesRoutes } from "../modules/course/course.routes";
+import { adminRoutes } from "../modules/admin/admin.routes";
 
 
 
@@ -34,6 +35,10 @@ const moduleRoutes = [
     {
         path: '/courses',
         endPoint: CoursesRoutes
+    },
+    {
+        path: '/admin',
+        endPoint: adminRoutes
     },
 ]
 
