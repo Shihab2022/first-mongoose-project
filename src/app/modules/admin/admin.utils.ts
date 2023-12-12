@@ -11,7 +11,8 @@ const findLastStudentId = async () => {
 }
 
 export const generatedAdminId = async () => {
-    let currentId = (0).toString()
+    // let currentId = (0).toString()
+    //this fiel is change th
     const lastStudentId = await findLastStudentId()
     return lastStudentId
 }
