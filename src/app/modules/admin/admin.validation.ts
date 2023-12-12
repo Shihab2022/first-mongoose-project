@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const adminValidationSchema = z.object({
     body: z.object({
+        id: z.string().optional(),
         email: z.string({ invalid_type_error: "please put valid email" }).email({ message: "Your gmail is not valid " }),
         password: z.string().max(20),
         needsPasswordChange: z.boolean().optional(),

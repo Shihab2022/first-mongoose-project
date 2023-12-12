@@ -13,8 +13,19 @@ const createAdmin = catchAsync(async (req, res) => {
         data: result
     })
 })
+const getSingleAdmin = catchAsync(async (req, res) => {
+    const { adminId } = req.params
+    const result = await adminServices.getSingleAdminFromDB(adminId)
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Fetch single admin successfully !!!",
+        data: result
+    })
+})
 
 
 export const adminController = {
-    createAdmin
+    createAdmin,
+    getSingleAdmin
 }

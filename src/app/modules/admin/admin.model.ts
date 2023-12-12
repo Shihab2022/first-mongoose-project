@@ -5,6 +5,10 @@ import bcrypt from 'bcrypt'
 import config from "../../config";
 
 const adminSchema = new Schema<TAdmin>({
+    id: {
+        type: String,
+        unique: true
+    },
     email: {
         type: String,
         unique: true,
@@ -35,8 +39,19 @@ const adminSchema = new Schema<TAdmin>({
         type: Boolean,
         default: false
     }
+}, {
+    timestamps: true
 })
 
+adminSchema.pre("save", async function (next) {
+    const user = this
+    user.password = await bcrypt.hash(
+        user.password,
+        Number(config.bcrypt_salt_rounds)
+    )
+    next()
+
+})
 adminSchema.pre("save", async function (next) {
     const user = this
     user.password = await bcrypt.hash(
