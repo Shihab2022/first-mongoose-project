@@ -54,11 +54,24 @@ const updateSingleAcademicFaculty = catchAsync(async (req, res) => {
         data: result
     })
 })
+const deleteAcademicFaculty = catchAsync(async (req, res) => {
+
+    const { facultyId } = req.params
+    const result = await AcademicFacultyService.deleteAcademicFacultyFromDB(facultyId)
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Delete  Academic faculty successfully !!!",
+        data: result
+    })
+})
 
 
 export const FacultyController = {
     getAllAcademicFaculty,
     getSingleAcademicFaculty,
     createAcademicFaculty,
-    updateSingleAcademicFaculty
+    updateSingleAcademicFaculty,
+    deleteAcademicFaculty
 }
