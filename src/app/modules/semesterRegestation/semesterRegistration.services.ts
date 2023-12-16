@@ -4,14 +4,15 @@ import { AcademicSemester } from "../academicSemester/academic.model"
 import { TSemesterRegistration } from "./semesterRegistration.interface"
 import { SemesterRegistration } from "./semesterRegistration.model"
 import QueryBuilder from "../../builder/QueryBuilder"
+import { RegistrationStatus } from "./semesterRegistration.constant"
 
 const createSemesterRegistrationIntoDB = async (payload: TSemesterRegistration) => {
     // check if there any registered semester that is already UPCOMING | ONGOING
 
     const isThereAnyUpComingOrOnGoingSemester = await SemesterRegistration.findOne({
         $or: [
-            { status: 'UPCOMING' },
-            { status: 'ONGOING' }
+            { status: RegistrationStatus.UPCOMING },
+            { status: RegistrationStatus.ONGOING }
         ]
     })
 
@@ -60,18 +61,18 @@ const updateSemesterRegistrationIntoDB = async (id: string, payload: Partial<TSe
     const currentSemesterStatus = isSemesterRegistrationExists.status
     const requestSemesterStatus = payload?.status
 
-    if (currentSemesterStatus === 'ENDED') {
+    if (currentSemesterStatus === RegistrationStatus.ENDED) {
         throw new AppError(httpStatus.BAD_REQUEST, `This semester is already ${currentSemesterStatus}`)
     }
 
 
     // ----> UPCOMING --->  ONGOING  ---> ENDED
     // This process is not revert back
-    if (currentSemesterStatus === "UPCOMING" && requestSemesterStatus === "ENDED") {
+    if (currentSemesterStatus === RegistrationStatus.UPCOMING && requestSemesterStatus === RegistrationStatus.ENDED) {
         throw new AppError(httpStatus.BAD_REQUEST, `You can not directly change status from ${currentSemesterStatus} to ${requestSemesterStatus}`)
     }
 
-    if (currentSemesterStatus === "ONGOING" && requestSemesterStatus === "UPCOMING") {
+    if (currentSemesterStatus === RegistrationStatus.ONGOING && requestSemesterStatus === RegistrationStatus.UPCOMING) {
         throw new AppError(httpStatus.BAD_REQUEST, `You can not directly change status from ${currentSemesterStatus} to ${requestSemesterStatus}`)
     }
 
