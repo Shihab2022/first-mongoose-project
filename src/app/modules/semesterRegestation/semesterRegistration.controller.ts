@@ -43,12 +43,12 @@ const updateSingleSemesterRegistration = catchAsync(async (req, res) => {
 
     const { id } = req.params
     const data = req.body
-    const result = await SemesterRegistrationServices.updateSingleSemesterRegistrationFromDB(id, data)
+    const result = await SemesterRegistrationService.updateSemesterRegistrationIntoDB(id, data)
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Update Single  Academic semester successfully !!!",
+        message: "Update Single  semester successfully !!!",
         data: result
     })
 })
