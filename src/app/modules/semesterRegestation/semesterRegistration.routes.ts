@@ -6,10 +6,10 @@ import { SemesterRegistrationControllers } from "./semesterRegistration.controll
 const router = express.Router()
 
 router.post("/create-semester-registration", validateRequest(SemesterRegistrationValidation.createSemesterRegistrationValidation), SemesterRegistrationControllers.createSemesterRegistration)
-
+router.get('/', SemesterRegistrationControllers.getAllSemesterRegistration)
 router.get('/:id', SemesterRegistrationControllers.getSingleSemesterRegistration)
 
-router.patch('/:id', SemesterRegistrationControllers.updateSingleSemesterRegistration)
+router.patch('/:id', validateRequest(SemesterRegistrationValidation.updateSemesterRegistrationValidation), SemesterRegistrationControllers.updateSingleSemesterRegistration)
 
 
 export const SemesterRegistrationRoute = router
