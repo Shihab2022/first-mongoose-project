@@ -6,6 +6,7 @@ import { SemesterRegistration } from "../semesterRegestation/semesterRegistratio
 import { AcademicFaculty } from "../academicFaculty/faculty.model"
 import { AcademicDepartment } from "../academicDepartment/department.model"
 import { Course, CourseFaculty } from "../course/course.model"
+import { hasTimeConflict } from "./offer.Course.utils"
 
 
 const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
@@ -70,17 +71,10 @@ const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
     }
 
     // 10:30-12:30
-    //
-    assignedSchedules.forEach((schedule) => {
-        const existingStartTime = new Date(`2000-01-01T${schedule.startTime}`)
-        const existingEndTime = new Date(`2000-01-01T${schedule.endTime}`)
-        const newStartTime = new Date(`2000-01-01T${newSchedule.startTime}`)
-        const newEndTime = new Date(`2000-01-01T${newSchedule.endTime}`)
-
-        if (newStartTime < existingEndTime && newEndTime > existingStartTime) {
-            throw new AppError(httpStatus.CONFLICT, `This faculty is not avilable in this time . please choose another time `)
-        }
-    })
+    // 11.30-1.30
+    if (hasTimeConflict(assignedSchedules, newSchedule)) {
+        throw new AppError(httpStatus.CONFLICT, `This faculty is not avilable in this time . please choose another time `)
+    }
 
 
 
