@@ -40,21 +40,21 @@ const createOfferedCourseValidation = z.object({
 })
 const updateOfferedCourseValidation = z.object({
     body: z.object({
-        faculty: z.string().optional(),
-        maxCapacity: z.number().optional(),
-        days: z.enum([...DaysEnum] as [string, ...string[]]).optional(),
+        faculty: z.string(),
+        maxCapacity: z.number(),
+        days: z.array(z.enum([...DaysEnum] as [string, ...string[]])),
         startTime: z.string().refine((time) => {
             const regex = /^[01]?[0-9]|2[0-3]:[0-5][0-9]/ ///00-09 10-19 20-23
             return regex.test(time)
         }, {
             message: "Invalid time formate , expected 'HH:MM' in 24 hours formate"
-        }).optional(),
+        }),
         endTime: z.string().refine((time) => {
             const regex = /^[01]?[0-9]|2[0-3]:[0-5][0-9]/ ///00-09 10-19 20-23
             return regex.test(time)
         }, {
             message: "Invalid time formate , expected 'HH:MM' in 24 hours formate"
-        }).optional(),
+        }),
     })
 })
 

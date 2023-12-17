@@ -99,31 +99,37 @@ const getSingleOfferedCourseFromDB = async (id: string) => {
     return result
 
 }
-const updateOfferedCourseIntoDB = async (id: string, payload: Partial<TOfferedCourse>) => {
+const updateOfferedCourseIntoDB = async (id: string, payload: Pick<TOfferedCourse, 'faculty' | 'days' | 'startTime' | 'endTime'>) => {
 
-    const isOfferedCourseExists = await OfferedCourse.findById(id)
-    if (!isOfferedCourseExists) {
-        throw new AppError(httpStatus.CONFLICT, "Semester is not found ")
+    const { faculty, days, startTime, endTime } = payload
+    const isOfferedCourseExits = await OfferedCourse.findById(id)
+    if (!isOfferedCourseExits) {
+        throw new AppError(httpStatus.NOT_FOUND, `Offered course not found`)
+
     }
-    // if the request semester registration is ended , we will not update anything
-    const currentSemesterStatus = isOfferedCourseExists.status
-    const requestSemesterStatus = payload?.status
-
-    if (currentSemesterStatus === RegistrationStatus.ENDED) {
-        throw new AppError(httpStatus.BAD_REQUEST, `This semester is already ${currentSemesterStatus}`)
-    }
-
-
-    // ----> UPCOMING --->  ONGOING  ---> ENDED
-    // This process is not revert back
-    if (currentSemesterStatus === RegistrationStatus.UPCOMING && requestSemesterStatus === RegistrationStatus.ENDED) {
-        throw new AppError(httpStatus.BAD_REQUEST, `You can not directly change status from ${currentSemesterStatus} to ${requestSemesterStatus}`)
+    const isFacultyExit = await CourseFaculty.findById(faculty)
+    if (!isFacultyExit) {
+        throw new AppError(httpStatus.NOT_FOUND, `Faculty is not found`)
     }
 
-    if (currentSemesterStatus === RegistrationStatus.ONGOING && requestSemesterStatus === RegistrationStatus.UPCOMING) {
-        throw new AppError(httpStatus.BAD_REQUEST, `You can not directly change status from ${currentSemesterStatus} to ${requestSemesterStatus}`)
+    const semesterRegistration = isOfferedCourseExits.semesterRegistration
+    const semesterRegistrationStatus = await SemesterRegistration.findById(semesterRegistration)
+    if (semesterRegistrationStatus?.status !== "UPCOMING") {
+        throw new AppError(httpStatus.BAD_REQUEST, `You can not update this offered course it is ${semesterRegistrationStatus?.status} `)
+    }
+    const assignedSchedules = await OfferedCourse.find({
+        semesterRegistration,
+        faculty,
+        days: { $in: days }
+    }).select("days startTime endTime")
+
+    const newSchedule = {
+        days, startTime, endTime
     }
 
+    if (hasTimeConflict(assignedSchedules, newSchedule)) {
+        throw new AppError(httpStatus.CONFLICT, `This faculty is not avilable in this time . please choose another time `)
+    }
     const result = await OfferedCourse.findByIdAndUpdate(id, payload, { new: true, runValidators: true })
     return result
 }
