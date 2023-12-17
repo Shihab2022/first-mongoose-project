@@ -26,16 +26,17 @@ const createOfferedCourseValidation = z.object({
         }, {
             message: "Invalid time formate , expected 'HH:MM' in 24 hours formate"
         }),
-    }).refine(({ body }) => {
-        // for compare time we let a random time for campare
-        // start time : 10:30 ===> 2000-01-01T10:30
-        // end time : 12:30 ===> 2000-01-01T12:30
-        const start = new Date(`2000-01-01T${body.startTime}`)
-        const end = new Date(`2000-01-01T${body.endTime}`)
-        return end > start
-    }, {
-        message: "Start time should be before end time"
     })
+    // .refine(({ body }) => {
+    //     // for compare time we let a random time for campare
+    //     // start time : 10:30 ===> 2000-01-01T10:30
+    //     // end time : 12:30 ===> 2000-01-01T12:30
+    //     const start = new Date(`2000-01-01T${body.startTime}`)
+    //     const end = new Date(`2000-01-01T${body.endTime}`)
+    //     return end > start
+    // }, {
+    //     message: "Start time should be before end time"
+    // })
 })
 const updateOfferedCourseValidation = z.object({
     body: z.object({

@@ -9,7 +9,7 @@ import { Course, CourseFaculty } from "../course/course.model"
 
 
 const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
-    const { semesterRegistration, academicFaculty, academicDepartment, course, faculty } = payload
+    const { semesterRegistration, academicFaculty, academicDepartment, course, faculty, section } = payload
 
     // check if the semester registration id is exit
 
@@ -40,6 +40,22 @@ const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
         throw new AppError(httpStatus.NOT_FOUND, 'Faculty is not found !')
     }
 
+    // check if the department is belong to the faculty
+    const isDepartmentBelongToFaculty = await AcademicDepartment.findOne({
+        _id: academicDepartment,
+        academicFaculty
+    })
+    if (!isDepartmentBelongToFaculty) {
+        throw new AppError(httpStatus.NOT_FOUND, `${academicDepartment} is not belong to this ${academicFaculty}`)
+    }
+
+
+    /// check if the same offer course same section in same registered semester exits
+    const isSameOfferedcourseExitsWithSamesterWithSameSection = await OfferedCourse.findOne({ semesterRegistration, course, section })
+
+    if (isSameOfferedcourseExitsWithSamesterWithSameSection) {
+        throw new AppError(httpStatus.BAD_REQUEST, `Offered course is already exits`)
+    }
     const result = await OfferedCourse.create({ ...payload, academicSemester })
     return result
 }

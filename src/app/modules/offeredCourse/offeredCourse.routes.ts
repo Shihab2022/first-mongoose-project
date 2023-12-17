@@ -9,7 +9,7 @@ router.post("/create-offered-course", validateRequest(OfferedCourseValidation.cr
 
 router.get('/', OfferedCourseControllers.getAllOfferedCourse)
 router.get('/:id', OfferedCourseControllers.getSingleOfferedCourse)
-router.delete('/:id', OfferedCourseControllers.deleteOfferCourse)
+// router.delete('/:id', OfferedCourseControllers.deleteOfferCourse)
 
 router.patch('/:id', validateRequest(OfferedCourseValidation.updateOfferedCourseValidation), OfferedCourseControllers.updateSingleOfferedCourse)
 
