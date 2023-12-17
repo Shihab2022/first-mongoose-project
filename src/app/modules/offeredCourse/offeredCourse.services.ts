@@ -9,7 +9,7 @@ import { Course, CourseFaculty } from "../course/course.model"
 
 
 const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
-    const { semesterRegistration, academicFaculty, academicDepartment, course, faculty, section } = payload
+    const { semesterRegistration, academicFaculty, academicDepartment, course, faculty, section, days, startTime, endTime } = payload
 
     // check if the semester registration id is exit
 
@@ -56,6 +56,38 @@ const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
     if (isSameOfferedcourseExitsWithSamesterWithSameSection) {
         throw new AppError(httpStatus.BAD_REQUEST, `Offered course is already exits`)
     }
+
+    // get the schedules of the faculties
+    const assignedSchedules = await OfferedCourse.find({
+        semesterRegistration,
+        faculty,
+        days: { $in: days }
+    }).select("days startTime endTime")
+
+
+    const newSchedule = {
+        days, startTime, endTime
+    }
+
+    // 10:30-12:30
+    //
+    assignedSchedules.forEach((schedule) => {
+        const existingStartTime = new Date(`2000-01-01T${schedule.startTime}`)
+        const existingEndTime = new Date(`2000-01-01T${schedule.endTime}`)
+        const newStartTime = new Date(`2000-01-01T${newSchedule.startTime}`)
+        const newEndTime = new Date(`2000-01-01T${newSchedule.endTime}`)
+
+        if (newStartTime < existingEndTime && newEndTime > existingStartTime) {
+            throw new AppError(httpStatus.CONFLICT, `This faculty is not avilable in this time . please choose another time `)
+        }
+    })
+
+
+
+
+
+
+
     const result = await OfferedCourse.create({ ...payload, academicSemester })
     return result
 }
