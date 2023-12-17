@@ -46,10 +46,10 @@ const offeredCourseSchema = new mongoose.Schema<TOfferedCourse>({
         type: Number,
         required: true,
     },
-    days: {
+    days: [{
         type: String,
         enum: DaysEnum,
-    },
+    }],
     startTime: {
         type: String,
         required: true
