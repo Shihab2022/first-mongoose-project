@@ -2,8 +2,9 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { User } from "../user/user.model";
 import { TLoginUser } from "./auth.interface";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
+import bcrypt from 'bcrypt'
 
 const LoginUser = async (payload: TLoginUser) => {
 
@@ -48,6 +49,50 @@ const LoginUser = async (payload: TLoginUser) => {
     return { accessToken, needsPasswordChange: user.needsPasswordChange }
 }
 
+const changePassword = async (userData: JwtPayload, payload: { oldPassword: string, newPassword: string }) => {
+    const user = await User.isUserExitsByCustomId(userData.userId)
+    console.log('user', user)
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, "This user is not found !!")
+    }
+    /// checking if the user is already deleted
+
+    const isUserDeleted = user.isDeleted
+    if (isUserDeleted) {
+        throw new AppError(httpStatus.FORBIDDEN, "This user is deleted!!")
+    }
+    /// checking if the user is blocked
+
+    const userStatus = user.status
+    if (userStatus === "blocked") {
+        throw new AppError(httpStatus.FORBIDDEN, "This user is blocked!!")
+    }
+
+    /// checking if the password is correct 
+
+    // const isPasswordMatched = await bcrypt.compare(payload.password, isUserExit.password)
+    // console.log('isPasswordMatched', isPasswordMatched)
+
+    if (! await User.isPasswordMatched(payload?.oldPassword, user?.password)) {
+        throw new AppError(httpStatus.FORBIDDEN, "Your password is not match ")
+    }
+
+
+    /// hash new password
+
+    const newHashPassword = await bcrypt.hash(payload.newPassword, Number(config.bcrypt_salt_rounds))
+
+    await User.findOneAndUpdate({
+        id: userData.userId,
+        role: userData.role
+    }, {
+        password: newHashPassword,
+        needsPasswordChange: false,
+        passwordChangeAt: new Date()
+    })
+    return null
+}
 export const AuthService = {
-    LoginUser
+    LoginUser,
+    changePassword
 }

@@ -18,6 +18,9 @@ const userSchema = new Schema<TUser, UserModel>(
             type: Boolean,
             default: true,
         },
+        passwordChangeAt: {
+            type: Date
+        },
         role: {
             type: String,
             enum: ['student', 'faculty', 'admin'],
@@ -55,7 +58,7 @@ userSchema.post('save', async function (doc, next) {
 /// create static for checking user
 
 userSchema.statics.isUserExitsByCustomId = async function (id: string) {
-    return await User.findOne({ id })
+    return await User.findOne({ id }).select("+password")
 
 }
 
