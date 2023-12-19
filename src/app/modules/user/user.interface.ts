@@ -16,7 +16,8 @@ export interface TUser {
 
 export interface UserModel extends Model<TUser> {
     isUserExitsByCustomId(id: string): Promise<TUser>;
-    isPasswordMatched(plainTextPassword: string, hashedPassword: string): Promise<boolean>
+    isPasswordMatched(plainTextPassword: string, hashedPassword: string): Promise<boolean>,
+    isJWTIssuedBeforePasswordChanged(passwordChangedTimeStamp: Date, jwtIssuedTimeStamp: number): boolean
 }
 
 
