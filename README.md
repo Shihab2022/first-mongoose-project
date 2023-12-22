@@ -12,6 +12,8 @@
 
 [npm i dotenv](https://www.npmjs.com/package/dotenv)
 
+[npm i cookie-parser](https://www.npmjs.com/package/cookie-parser)
+
 ```
 tsc -init
 ```

@@ -2,7 +2,8 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { User } from "../user/user.model";
 import { TLoginUser } from "./auth.interface";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import config from "../../config";
 import bcrypt from 'bcrypt'
 import { createToken } from "./auth.utiles";
@@ -96,7 +97,47 @@ const changePassword = async (userData: JwtPayload, payload: { oldPassword: stri
     })
     return null
 }
+
+const refreshToken = async (token: string) => {
+
+    /// verify the token
+    const decoded = jwt.verify(token, config.jwt_refresh_secret as string) as JwtPayload///here  there have an problem 
+    const { userId, iat } = decoded
+
+    const user = await User.isUserExitsByCustomId(userId)
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, "This user is not found !!")
+    }
+    /// checking if the user is already deleted
+
+    const isUserDeleted = user.isDeleted
+    if (isUserDeleted) {
+        throw new AppError(httpStatus.FORBIDDEN, "This user is deleted!!")
+    }
+    /// checking if the user is blocked
+
+    const userStatus = user.status
+    if (userStatus === "blocked") {
+        throw new AppError(httpStatus.FORBIDDEN, "This user is blocked!!")
+    }
+    if (user.passwordChangeAt && User.isJWTIssuedBeforePasswordChanged(user.passwordChangeAt, iat as number)) {
+        throw new AppError(httpStatus.UNAUTHORIZED, "Your are not authorized !!")
+    }
+
+
+    const jwtPayload = {
+        userId: user.id,
+        role: user.role
+    }
+
+    const accessToken = createToken(jwtPayload, config.jwt_access_secret as string, config.jwt_access_expire_in as string)
+
+    return {
+        accessToken
+    }
+}
 export const AuthService = {
     LoginUser,
-    changePassword
+    changePassword,
+    refreshToken
 }
