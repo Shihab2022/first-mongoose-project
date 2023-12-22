@@ -12,6 +12,8 @@
 
 [npm i dotenv](https://www.npmjs.com/package/dotenv)
 
+[npm i cookie-parser](https://www.npmjs.com/package/cookie-parser)
+
 ```
 tsc -init
 ```
@@ -338,3 +340,15 @@ _Auth:_
 ## Module 15
 
 [PH university course](https://docs.google.com/document/d/1mLR5JsxKm0gUU2MGeLK4wLAUqrlVQaZZDiOKYtigqBQ/edit?usp=sharing)
+
+## For create secret key in your node terminal
+
+```
+node
+```
+
+# then put this command
+
+```
+require('crypto').randomBytes(32).toString('hex')
+```
