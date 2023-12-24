@@ -161,9 +161,9 @@ const forgetPassword = async (userId: string) => {
         role: user.role
     }
 
-    const accessToken = createToken(jwtPayload, config.jwt_access_secret as string, '10m')
+    const resetToken = createToken(jwtPayload, config.jwt_access_secret as string, '10m')
 
-    const resetUiLink = `http://localhost:3000?id=${user.id}&token=${accessToken}`
+    const resetUiLink = `http://localhost:3000?id=${user.id}&token=${resetToken}`
     console.log('resetUiLink', resetUiLink)
 }
 export const AuthService = {

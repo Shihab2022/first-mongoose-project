@@ -20,6 +20,7 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
 
     // set user role 
     userData.role = 'student'
+    userData.email = studentData.email
 
 
     //  your semester 4 digit number

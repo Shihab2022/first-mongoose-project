@@ -14,6 +14,9 @@
 
 [npm i cookie-parser](https://www.npmjs.com/package/cookie-parser)
 
+[npm install nodemailer
+](https://nodemailer.com/)
+
 ```
 tsc -init
 ```
