@@ -136,8 +136,39 @@ const refreshToken = async (token: string) => {
         accessToken
     }
 }
+
+const forgetPassword = async (userId: string) => {
+
+    const user = await User.isUserExitsByCustomId(userId)
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, "This user is not found !!")
+    }
+    /// checking if the user is already deleted
+
+    const isUserDeleted = user.isDeleted
+    if (isUserDeleted) {
+        throw new AppError(httpStatus.FORBIDDEN, "This user is deleted!!")
+    }
+    /// checking if the user is blocked
+
+    const userStatus = user.status
+    if (userStatus === "blocked") {
+        throw new AppError(httpStatus.FORBIDDEN, "This user is blocked!!")
+    }
+
+    const jwtPayload = {
+        userId: user.id,
+        role: user.role
+    }
+
+    const accessToken = createToken(jwtPayload, config.jwt_access_secret as string, '10m')
+
+    const resetUiLink = `http://localhost:3000?id=${user.id}&token=${accessToken}`
+    console.log('resetUiLink', resetUiLink)
+}
 export const AuthService = {
     LoginUser,
     changePassword,
-    refreshToken
+    refreshToken,
+    forgetPassword
 }
