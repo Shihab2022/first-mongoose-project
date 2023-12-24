@@ -187,6 +187,22 @@ const resetPassword = async (payload: { id: string, newPassword: string }, token
     if (userStatus === "blocked") {
         throw new AppError(httpStatus.FORBIDDEN, "This user is blocked!!")
     }
+
+    /// verify the token
+    const decoded = jwt.verify(token, config.jwt_access_secret as string) as JwtPayload///here  there have an problem 
+    if (payload.id !== decoded.userId) {
+        throw new AppError(httpStatus.FORBIDDEN, "Your are wrong please try again !")
+    }
+    const newHashPassword = await bcrypt.hash(payload.newPassword, Number(config.bcrypt_salt_rounds))
+    await User.findOneAndUpdate({
+        id: decoded.userId,
+        role: decoded.role
+    }, {
+        password: newHashPassword,
+        needsPasswordChange: false,
+        passwordChangeAt: new Date()
+    })
+
 }
 export const AuthService = {
     LoginUser,
