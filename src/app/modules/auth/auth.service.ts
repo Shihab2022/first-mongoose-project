@@ -6,7 +6,7 @@ import { JwtPayload } from "jsonwebtoken";
 import jwt from "jsonwebtoken";
 import config from "../../config";
 import bcrypt from 'bcrypt'
-import { createToken } from "./auth.utiles";
+import { createToken, verifyToken } from "./auth.utiles";
 import { sendEmail } from "../../utils/sendEmail";
 
 const LoginUser = async (payload: TLoginUser) => {
@@ -102,7 +102,7 @@ const changePassword = async (userData: JwtPayload, payload: { oldPassword: stri
 const refreshToken = async (token: string) => {
 
     /// verify the token
-    const decoded = jwt.verify(token, config.jwt_refresh_secret as string) as JwtPayload///here  there have an problem 
+    const decoded = verifyToken(token, config.jwt_refresh_secret as string)
     const { userId, iat } = decoded
 
     const user = await User.isUserExitsByCustomId(userId)
@@ -189,7 +189,7 @@ const resetPassword = async (payload: { id: string, newPassword: string }, token
     }
 
     /// verify the token
-    const decoded = jwt.verify(token, config.jwt_access_secret as string) as JwtPayload///here  there have an problem 
+    const decoded = verifyToken(token, config.jwt_access_secret as string)
     if (payload.id !== decoded.userId) {
         throw new AppError(httpStatus.FORBIDDEN, "Your are wrong please try again !")
     }

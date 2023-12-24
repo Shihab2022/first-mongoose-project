@@ -8,6 +8,9 @@ import { TUser } from "./user.interface"
 import { User } from "./user.model"
 import { generatedStudentId } from "./user.utilis"
 import AppError from "../../errors/AppError"
+import { verifyToken } from "../auth/auth.utiles"
+import { Admin } from "../admin/admin.model"
+import { CourseFaculty } from "../course/course.model"
 
 
 const createStudentIntoDB = async (password: string, studentData: TStudent) => {
@@ -65,7 +68,24 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
 
 
 }
+const getMe = async (token: string) => {
+    const decoded = verifyToken(token, config.jwt_access_secret as string)
+    const { userId, role } = decoded
+    let result = null
 
+    if (role === "student") {
+        result = await Student.findOne({ id: userId })
+    }
+    if (role === "admin") {
+        result = await Admin.findOne({ id: userId })
+    }
+    if (role === "faculty") {
+        result = await CourseFaculty.findOne({ id: userId })
+    }
+
+    return result
+}
 export const UserServices = {
-    createStudentIntoDB
+    createStudentIntoDB,
+    getMe
 }
